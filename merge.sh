@@ -2,25 +2,23 @@
 #Since you have to download the electoral maps by state this
 #file merges them into a single file
 
-if [ -f map-out/distritos/mx_distrito.shp ];
-then
-   rm map-out/distritos/mx_distrito.*
-fi
+function merge {
+  #Delete the merged shapefile if it exists
+  if [ -f $1.shp ];
+  then
+     rm $1.*
+  fi
 
-for file in unzip/distrito/*.shp
-do
-        echo ${file}
-	ogr2ogr -update -append map-out/distritos/mx_distrito.shp ${file}  -nln mx_distrito 
-done
+  #Merge the files from Mexico's 32 states into one big shapefile
+  for file in unzip/distrito/*.shp
+  do
+    echo ${file}
+    ogr2ogr -update -append $1.shp ${file}  -nln $2 
+  done
+}
+
+merge "map-out/distritos/mx_distrito" mx_distrito
+#Since we want to add the INEGI municipality codes we merge it to a temporary file
+merge "unzip/seccion/mx_secciones_ife" mx_secciones_ife
 
 
-if [ -f unzip/seccion/mx_secciones_ife.shp ];
-then
-   rm unzip/seccion/mx_secciones_ife.*
-fi
-
-for file in unzip/seccion/*.shp
-do
-        echo ${file}
-	ogr2ogr -update -append unzip/seccion/mx_secciones_ife.shp ${file}  -nln mx_secciones_ife
-done

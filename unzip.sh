@@ -1,15 +1,13 @@
 #!/bin/bash 
-for i in zip/mexico/*.zip
-do      
-  unzip $i -d unzip/mexico 
-done
+#Unzip the shapefiles
+function decompress {
+  for i in zip/$1/*.zip
+    do      
+      unzip $i -d unzip/$1
+  done
+}
 
-for i in zip/distrito/*.zip
-do      
-  unzip $i -d unzip/distrito 
-done
+decompress mexico
+decompress distrito
+decompress seccion
 
-for i in zip/seccion/*.zip
-do      
-  unzip $i -d unzip/seccion
-done
