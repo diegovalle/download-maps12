@@ -1,0 +1,6 @@
+*.shp
+*.dbf
+*.zip
+*.shx
+*.prj
+.Rhistory
