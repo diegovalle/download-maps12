@@ -14,9 +14,9 @@ do
 done
 
 
-if [ -f map-out/distritos/mx_distrito.shp ];
+if [ -f unzip/seccion/mx_secciones_ife.shp ];
 then
-   rm unzip/seccion/mx_secciones_ife.shp
+   rm unzip/seccion/mx_secciones_ife.*
 fi
 
 for file in unzip/seccion/*.shp
