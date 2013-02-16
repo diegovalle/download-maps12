@@ -18,7 +18,10 @@ declare -a files=("01Aguascalientes" "02BajaCalifornia" "03BajaCaliforniaSur"
 for file in "${files[@]}"
 do
         echo ${file}
-	$WGET http://www.ife.org.mx/docs/IFE-v2/DERFE/DERFE-DistritosElectorales/DERFE-ProductosGeoElecDesc-docs/${file}.zip -O ife/${file}.zip
+          if [! -f ife/${file}.zip ];
+            then
+	      $WGET http://www.ife.org.mx/docs/IFE-v2/DERFE/DERFE-DistritosElectorales/DERFE-ProductosGeoElecDesc-docs/${file}.zip -O ife/${file}.zip
+            fi
 done
 
 ###Unzip the files
