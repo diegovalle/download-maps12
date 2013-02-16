@@ -2,7 +2,7 @@ MKDIR=mkdir -p
 
 default: all
 
-all: dirs download download-censales merge reproject recode
+all: dirs download download-censales unzip merge reproject recode
 
 dirs: 
 	for file in zip zip/distrito zip/mexico zip/seccion unzip unzip/distrito unzip/mexico unzip/seccion ife map-out map-out/distritos map-out/estados map-out/localidades map-out/municipios map-out/rdata-secciones map-out/secciones-inegi ; do \
@@ -14,13 +14,16 @@ download: dirs
 download-censales: dirs
 	chmod +x download-censales.sh
 	./download-censales.sh
-merge: dirs
+unzip: dirs
+	chmod +x unzip.sh
+	./unzip.sh
+merge: dirs 
 	chmod +x merge.sh
 	./merge.sh
 reproject: dirs
 	chmod +x reproject.sh
 	./reproject.sh
-recode: download download-censales merge reproject
+recode: download download-censales unzip merge reproject
 	R CMD BATCH recode.R
 
 clean: 
