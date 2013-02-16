@@ -24,4 +24,4 @@ Since the IFE uses a different coding standard for the municipalities of Mexico 
 * MUN_INEGI: The inegi municipio codes
 * MUN_IFE: The original ife municipio codes that came with the file
 
-The codebook for the electoral shapefiles is in the FD_SECC_IFE.pdf file
+The codebook for the electoral shapefiles is in the FD_SECC_IFE.pdf file and the ife and inegi codes in the ife.to.inegi.csv file
