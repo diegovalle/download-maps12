@@ -105,7 +105,7 @@ ife.to.inegi <- rbind(ife.to.inegi, data.frame(id.ife = c(12079, 12080, 12081, 1
 write.csv(ife.to.inegi[,1:2], "ife.to.inegi.csv", row.names = FALSE)
 
 
-
+message("Reading Secciones Shapefile (may take awhile...)")
 seccion <- readOGR(file.path("unzip", "seccion"), "mx_secciones_ife")
 
 
