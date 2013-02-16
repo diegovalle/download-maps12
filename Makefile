@@ -14,16 +14,16 @@ download: dirs
 download-censales: dirs
 	chmod +x download-censales.sh
 	./download-censales.sh
-unzip: dirs
+unzip: dirs download download-censales
 	chmod +x unzip.sh
 	./unzip.sh
-merge: dirs 
+merge: dirs download download-censales unzip
 	chmod +x merge.sh
 	./merge.sh
-reproject: dirs
+reproject: dirs download download-censales unzip merge
 	chmod +x reproject.sh
 	./reproject.sh
-recode: download download-censales unzip merge reproject
+recode: download download-censales unzip merge
 	R CMD BATCH recode.R
 
 clean: 
