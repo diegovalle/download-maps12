@@ -1,4 +1,6 @@
 #!/bin/bash 
+#Nice projection so that you can use the maps from
+#google earth or ggplot
 PROJECTION="+proj=longlat +ellps=WGS84 +no_defs +towgs84=0,0,0"
 
 ogr2ogr map-out/estados/estados.shp unzip/mexico/MUNICIPIOS.shp -t_srs $PROJECTION

@@ -1,4 +1,6 @@
 #!/bin/bash
+#Since you have to download the electoral maps by state this
+#file merges them into a single file
 
 if [ -f map-out/distritos/mx_distrito.shp ];
 then
