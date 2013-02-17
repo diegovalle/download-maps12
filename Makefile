@@ -1,5 +1,5 @@
 MKDIR=mkdir -p
-R=R CMD BATCH 
+R=Rscript
 CHMOD=chmod +x 
 
 default: all

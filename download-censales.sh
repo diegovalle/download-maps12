@@ -27,5 +27,5 @@ done
 ###Unzip the files
 for i in ife/*.zip
 do      
-  unzip $i -d ife 
+  unzip -o $i -d ife 
 done

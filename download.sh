@@ -7,10 +7,17 @@ WGET="wget -c -nc -w 5 --random-wait --tries=10 "
 function download_ife {
   for (( i = 1 ; i <= 32 ; i++ ))
     do 
-      print $i
+      echo $i
       if [ ! -f zip/$1/$i-$1.zip ];
         then
           $WGET $2$i -O zip/$1/$i-$1.zip
+      fi
+      if [ ! -s zip/$1/$i-$1.zip ]
+      then
+        echo "##########################################################################"
+	echo "Something went wrong when downloading the file. make clean"
+        echo "##########################################################################"
+	exit 1
       fi
     done 
 }
@@ -23,26 +30,36 @@ function download_inegi {
       if [ $? -ne 0 ]
         then
           echo "##########################################################################"
-	  echo "Sometimes mapserver.inegi.org.mx goes down, try again after a few hours"
+	  echo "Sometimes mapserver.inegi.org.mx goes down, make clean and try again after a few hours"
           echo "##########################################################################"
 	  exit 1
-	fi
+      fi
+    if [ ! -s zip/mexico/$1 ]
+      then
+        echo "##########################################################################"
+	echo "Something went wrong when downloading the file. make clean"
+        echo "##########################################################################"
+	exit 1
+    fi
   fi
 }
 
-###Download Shapefiles from the INEGI
-#download_inegi municipios50.zip "http://mapserver.inegi.org.mx/data/mgm/redirect.cfm?fileX=MUNICIPIOS50"
-
-#download_inegi estados50.zip "http://mapserver.inegi.org.mx/data/mgm/redirect.cfm?fileX=ESTADOS50"
-
-#download_inegi localidades-urbanas50.zip "http://mapserver.inegi.org.mx/data/mgm/redirect.cfm?fileX=LOCURBANAS50"
-
-#download_inegi localidades-rurales50.zip "http://mapserver.inegi.org.mx/data/mgm/redirect.cfm?fileX=LOCRURALES50"
-
 
 ###Download Shapefiles from the IFE
+#http://gaia.inegi.org.mx/NLB/tunnel/IFE2010/Descarga.do?tabla=0&grupo=0&edo=
 download_ife distrito "http://gaia.inegi.org.mx/NLB/tunnel/IFE2010/Descarga.do?tabla=1&grupo=1,2,3,4,5,6,7,8,9,10,11,12&edo="
 
 download_ife seccion "http://gaia.inegi.org.mx/NLB/tunnel/IFE2010/Descarga.do?tabla=2&grupo=1,2,3,4,5,6,7,8,9,10,11,12&edo="
+
+###Download Shapefiles from the INEGI
+download_inegi municipios50.zip "http://mapserver.inegi.org.mx/data/mgm/redirect.cfm?fileX=MUNICIPIOS50"
+
+download_inegi estados50.zip "http://mapserver.inegi.org.mx/data/mgm/redirect.cfm?fileX=ESTADOS50"
+
+download_inegi localidades-urbanas50.zip "http://mapserver.inegi.org.mx/data/mgm/redirect.cfm?fileX=LOCURBANAS50"
+
+download_inegi localidades-rurales50.zip "http://mapserver.inegi.org.mx/data/mgm/redirect.cfm?fileX=LOCRURALES50"
+
+
 
 
