@@ -39,7 +39,11 @@ ife.mun$id <- str_c(ife.mun$Entidad, ", ",ife.mun$Nom_mun)
 good <- merge(inegi.mun, ife.mun, all.y = TRUE, by = "id")
 
 #write.csv(good, "good.csv")
-good[which(is.na(good$NOM_ENT)),]
+test_that("no nulls in the IFE municipalities", 
+{expect_that(nrow(good[which(is.na(good$NOM_ENT)),]), equals(0))})
+
+#test_that("all ife municipalities were assigned an INEGI code", 
+#{expect_that(nrow(good[which(is.na(good$id.inegi)),]), equals(0))})
 
 ##Standarize the formats for the ids
 good$code <-  str_c(str_replace(format(good$Entidad, width = 2), " ", "0"),
@@ -69,12 +73,12 @@ ife.to.inegi <- subset(ife.to.inegi, id.ife != "09000")
 #San Pedro Mixtepec - Distrito 22 - 20316 = 20318
 #San Juan Mixtepec Distrito 08 - 20208
 #San Juan Mixtepec Distrito 26 - 20209
-ife.to.inegi[ife.to.inegi$name %in% c("mineral de la reforma",
-                                      "pachuca de soto",
-                                      "san juan mixtepec",
-                                      "san pedro mixtepec",
-                                      "miguel hidalgo"
-),]
+# ife.to.inegi[ife.to.inegi$name %in% c("mineral de la reforma",
+#                                       "pachuca de soto",
+#                                       "san juan mixtepec",
+#                                       "san pedro mixtepec",
+#                                       "miguel hidalgo"
+# ),]
 
 
 
