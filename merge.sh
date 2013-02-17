@@ -4,6 +4,7 @@
 
 function merge {
   #Delete the merged shapefile if it exists
+  echo merging $3 shapefiles
   if [ -f $1.shp ];
   then
      rm $1.*
@@ -12,7 +13,7 @@ function merge {
   #Merge the files from Mexico's 32 states into one big shapefile
   for file in unzip/$3/*.shp
   do
-    echo ${file}
+    #echo ${file}
     ogr2ogr -update -append $1.shp ${file}  -nln $2 
   done
 }
