@@ -4,8 +4,16 @@ Download Mexican maps
 You'll need to have __wget__, __gdal__, and __R__ installed to run the program. Just run
 
  ```
-make
+$ make
  ```
+
+If something went wrong with the downloading, use:
+
+ ```
+$ make clean
+ ```
+
+and try again after a few hours
 
 Since the scripts download a whole bunch of maps it may take a while to finish
 
@@ -16,7 +24,7 @@ In the map-out directory you'll find
 * estados: Shapefile of the Mexican states
 * localidades: Shapefile of the rural localities and the polygons of the urban ones
 * municipios: Shapefile of the counties of Mexico
-* rdata-secciones: serialized secciones (precincts) as an R object
+* rdata-secciones: serialized secciones (precincts) map as an R object
 
 
 Since the IFE uses a different coding standard for the municipalities of Mexico I've recoded them so that they match the INEGI codes. 
