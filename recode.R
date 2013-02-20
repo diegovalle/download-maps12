@@ -28,7 +28,7 @@ for(d in dirs) {
   ife.mun <- rbind(temp, ife.mun)
 }
 ##subset the variables we need
-ife.mun <- ife.mun[,c("Entidad","Distrito", "Seccion","Municipio","Nom_mun")]
+ife.mun <- ife.mun[,c("Entidad","Municipio","Nom_mun")]
 ##capitalization just makes it more dificult to match names
 ife.mun$Nom_mun <- tolower(ife.mun$Nom_mun)
 ##Prepend the state number to deal with duplicate municipality names
@@ -41,6 +41,11 @@ good <- merge(inegi.mun, ife.mun, all.y = TRUE, by = "id")
 #write.csv(good, "good.csv")
 test_that("no nulls in the IFE municipalities", 
 {expect_that(nrow(good[which(is.na(good$NOM_ENT)),]), equals(0))})
+
+test_that("same number of municipalities", 
+{expect_that(length(unique(good$id.inegi)), equals(length(unique(good$id.ife))))})
+
+
 
 #test_that("all ife municipalities were assigned an INEGI code", 
 #{expect_that(nrow(good[which(is.na(good$id.inegi)),]), equals(0))})
@@ -64,6 +69,7 @@ ife.to.inegi$id.inegi <- as.character(ife.to.inegi$id.inegi)
 #a <- as.vector(ife.to.inegi$name)
 ##get rid of the phantom 000 municipality
 ife.to.inegi <- subset(ife.to.inegi, id.ife != "09000")
+ife.to.inegi[which(ife.to.inegi$id.ife == 12078),]
 
 
 #remove pachuca de soto 13040
@@ -100,10 +106,19 @@ ife.to.inegi$name <- as.character(ife.to.inegi$name)
 
 ##Some missing municipalites
 ##Replace San Ignacio Cerro Gordo with Arandas to match the population data?
-##leave as the San Ignacio Cerro Gordo
+##Ans: for the time being leave as San Ignacio Cerro Gordo
+
+##Some municipalities are missing from the información geoestadística censal
+##but are present in the shapefile
+##I used the map to visually match them with the inegi ones
+
+##Cochoapa el Grande (ife - 12079 inegi 12078)
+##Marquelia (ife - 12080 inegi 12077)
+##Juchitán (ife - 12081 inegi 12080)
+##San Ignacio Cerro Gordo (created in 2006) (ife 14125 - inegi 14125)
 ife.to.inegi <- rbind(ife.to.inegi, data.frame(id.ife = c(12079, 12080, 12081, 14125),
-           id.inegi = c(12079, 12080, 12081, 14125),
-           name = c("José Joaquin de Herrera", "Juchitán", "Iliatenco", "Arandas")))
+           id.inegi = c(12078, 12077, 12080, 14125),
+           name = c("Cochoapa", "Marquelia", "Juchitán", "San Ignacio Cerro Gordo")))
 
 ##write the result to disk
 write.csv(ife.to.inegi[,1:2], "ife.to.inegi.csv", row.names = FALSE)
@@ -111,13 +126,14 @@ write.csv(ife.to.inegi[,1:2], "ife.to.inegi.csv", row.names = FALSE)
 
 message("Reading Secciones Shapefile (may take awhile...)")
 seccion <- readOGR(file.path("unzip", "seccion"), "mx_secciones_ife")
+##seccion <- load(file.path("map-out", "rdata-secciones"), "secciones.RData")
 
 
 v <- as.numeric(str_c(seccion@data$ENTIDAD, 
                       gsub(" ", "0", format(seccion@data$MUNICIPIO, width = 3))))
-##a <- data.frame(sort(unique(v)), sort(ife.to.inegi$id.ife))
+a <- data.frame(sort(unique(v)), sort(ife.to.inegi$id.ife))
 test_that("the ife codes are equal to the ones in the map",
-          {expect_that(all.equal(sort(unique(v)), c(sort(ife.to.inegi$id.ife))), equals(TRUE))})
+          {expect_that(all.equal(sort(unique(v)), sort(ife.to.inegi$id.ife)), equals(TRUE))})
 
 
 v <-recodeVar(v, 
@@ -148,6 +164,6 @@ test_that("no nulls in the INEGI municipalities",
 writeOGR(seccion, "map-out/secciones-inegi", "secciones", driver="ESRI Shapefile",
          overwrite_layer=TRUE)
 save(seccion, file = file.path("map-out","rdata-secciones", "secciones.Rdata"))
-
+load(file.path("map-out","rdata-secciones", "secciones.Rdata"))
 
 
