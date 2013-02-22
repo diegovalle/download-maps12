@@ -1,7 +1,13 @@
+########################################################
+## Author: Diego Valle-Jones
+## Website: www.diegovalle.net
+## Date Created: Thu Feb 21 18:37:03 2013
+## Email: diegovalle at gmail.com
+## Purpose: Recode the municipality codes that the IFE uses to the ones used by the INEGI
+## Copyright (c) Diego Valle-Jones. All rights reserved
+
+
 ##library(rgeos)
-##library(plyr)
-##library(reshape2)
-##library(Hmisc)
 library(rgdal)
 library(maptools)
 library(stringr)
@@ -168,8 +174,8 @@ test_that("no nulls in the INEGI municipalities",
 
 writeOGR(seccion, "map-out/secciones-inegi", "secciones", driver="ESRI Shapefile",
          overwrite_layer=TRUE)
-save(seccion, file = file.path("map-out","rdata-secciones", "secciones.Rdata"))
-##load(file.path("map-out","rdata-secciones", "secciones.Rdata"))
+save(seccion, file = file.path("map-out","rdata-secciones", "secciones.RData"))
+##load(file.path("map-out","rdata-secciones", "secciones.RData"))
 
 ##Dissolve the secciones into counties
 ##NOT DONE
