@@ -1,14 +1,13 @@
-library(data.table)
-library(plyr)
-library(reshape2)
+##library(rgeos)
+##library(plyr)
+##library(reshape2)
+##library(Hmisc)
 library(rgdal)
-library(ggplot2)
 library(maptools)
 library(stringr)
-library(grid)
-library(Hmisc)
 library(doBy)
 library(testthat)
+##gpclibPermit()
 
 ##Read a file containing the inegi fips codes
 inegi.mun <- read.csv("data/municipios-inegi.csv",
@@ -69,7 +68,6 @@ ife.to.inegi$id.inegi <- as.character(ife.to.inegi$id.inegi)
 #a <- as.vector(ife.to.inegi$name)
 ##get rid of the phantom 000 municipality
 ife.to.inegi <- subset(ife.to.inegi, id.ife != "09000")
-ife.to.inegi[which(ife.to.inegi$id.ife == 12078),]
 
 
 #remove pachuca de soto 13040
@@ -107,11 +105,12 @@ ife.to.inegi$name <- as.character(ife.to.inegi$name)
 ##Some missing municipalites
 ##Replace San Ignacio Cerro Gordo with Arandas to match the population data?
 ##Ans: for the time being leave as San Ignacio Cerro Gordo
+##San Ignacio Cerro Gordo was part of Arandas before being created
+##SICG inegi 14 125 - Arandas inegi 14 008
 
 ##Some municipalities are missing from the información geoestadística censal
 ##but are present in the shapefile
-##I used the map to visually match them with the inegi ones
-
+##I used the map to visually match them with the inegi ones:
 ##Cochoapa el Grande (ife - 12079 inegi 12078)
 ##Marquelia (ife - 12080 inegi 12077)
 ##Juchitán (ife - 12081 inegi 12080)
@@ -119,6 +118,12 @@ ife.to.inegi$name <- as.character(ife.to.inegi$name)
 ife.to.inegi <- rbind(ife.to.inegi, data.frame(id.ife = c(12079, 12080, 12081, 14125),
            id.inegi = c(12078, 12077, 12080, 14125),
            name = c("Cochoapa", "Marquelia", "Juchitán", "San Ignacio Cerro Gordo")))
+
+test_that("same number of municipalities", 
+{expect_that(length(unique(ife.to.inegi$id.inegi)),
+             equals(length(unique(ife.to.inegi$id.ife))))})
+
+
 
 ##write the result to disk
 write.csv(ife.to.inegi[,1:2], "ife.to.inegi.csv", row.names = FALSE)
@@ -131,7 +136,7 @@ seccion <- readOGR(file.path("unzip", "seccion"), "mx_secciones_ife")
 
 v <- as.numeric(str_c(seccion@data$ENTIDAD, 
                       gsub(" ", "0", format(seccion@data$MUNICIPIO, width = 3))))
-a <- data.frame(sort(unique(v)), sort(ife.to.inegi$id.ife))
+##a <- data.frame(sort(unique(v)), sort(ife.to.inegi$id.ife))
 test_that("the ife codes are equal to the ones in the map",
           {expect_that(all.equal(sort(unique(v)), sort(ife.to.inegi$id.ife)), equals(TRUE))})
 
@@ -164,6 +169,32 @@ test_that("no nulls in the INEGI municipalities",
 writeOGR(seccion, "map-out/secciones-inegi", "secciones", driver="ESRI Shapefile",
          overwrite_layer=TRUE)
 save(seccion, file = file.path("map-out","rdata-secciones", "secciones.Rdata"))
-load(file.path("map-out","rdata-secciones", "secciones.Rdata"))
+##load(file.path("map-out","rdata-secciones", "secciones.Rdata"))
 
+##Dissolve the secciones into counties
+##NOT DONE
+## message("creating shapefile of the ife municipios... may take awhile")
+## ife.muns <- NULL
+## for(i in seq_along(1:32)) {
+  
+##   DissolveResult <- unionSpatialPolygons(seccion[seccion@data$ENTIDAD == i,],
+##                                          seccion@data$MUN_IFE[seccion@data$ENTIDAD == i],
+##                                          threshold = 50000000000000)
+##   DissolveResult <- spChFIDs(DissolveResult,
+##                              paste(i, sapply(slot(DissolveResult, "polygons"), slot, "ID"),
+##                                    sep="_"))
 
+##   if(!is.null(ife.muns))
+##     ife.muns <- spRbind(ife.muns, DissolveResult)
+##   else
+##     ife.muns <- DissolveResult
+##   message(str_c("dissolved state ", i, " of 32"))
+## }
+## plot(ife.muns)
+
+## data <- data.frame(NewID = row.names(ife.muns))
+## row.names(data) <- row.names(ife.muns)
+
+## writeOGR(SpatialPolygonsDataFrame(ife.muns, data),
+## "map-out/municipios-ife", "municipios-ife", driver="ESRI Shapefile",
+##          overwrite_layer=TRUE)

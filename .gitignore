@@ -4,4 +4,9 @@
 *.shx
 *.prj
 .Rhistory
+.RData
+unzip/*
+zip/*
+ife/*
+map-out/*
 recode.Rout
