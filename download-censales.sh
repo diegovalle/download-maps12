@@ -1,6 +1,6 @@
 #!/bin/bash
 #Download the estadisticas censales from the ife
-#This files are necessary to merge with the inegi codes using
+#These files are necessary to merge with the file containing the inegi codes using
 #the names of the municipalities
 
 WGET="wget -c -nc -w 5 --random-wait --tries=10 "

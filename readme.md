@@ -29,11 +29,11 @@ In the map-out directory you'll find
 * rdata-secciones: serialized secciones (precincts) map as an R object
 
 
-Since the IFE uses a different coding standard for the municipalities of Mexico than the INEGI I've recoded them so that they match the INEGI codes. 
+Since the IFE uses a different coding standard for the municipalities of Mexico than the INEGI, I've recoded the municipality codes so that they match the ones the INEGI uses. 
 
  ```
-México, Ecatepec according to the INEGI is 15 033 while according to the IFE it's 15 034
-Jalisco, Guadalajara according to the INEGI is 14 039 while according to the IFE it's 14 041
+Ecatepec, México according to the INEGI is 15 033, while according to the IFE it's 15 034
+Guadalajara, Jalisco according to the INEGI is 14 039, while according to the IFE it's 14 041
 ```
 
 These codes are only available for the secciones electorales (precincts) shapefile and they are contained in the variables:
@@ -43,6 +43,6 @@ These codes are only available for the secciones electorales (precincts) shapefi
 
 The codebook for the the census data that comes with the shapefiles is in the FD_SECC_IFE.pdf file and the ife and inegi codes are in the ife.to.inegi.csv file
 
-Author
+Author:
 
 [Diego Valle-Jones](http://www.diegovalle.net)
