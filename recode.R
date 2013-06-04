@@ -8,6 +8,13 @@
 
 
 ##library(rgeos)
+##install necessary packages if they are not already installed
+##http://stackoverflow.com/questions/4090169/elegant-way-to-check-for-missing-packages-and-install-them
+list.of.packages <- c("rgdal", "maptools", "stringr", "doBy", "testthat", "data.table")
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
+
+library(data.table)
 library(rgdal)
 library(maptools)
 library(stringr)
@@ -116,10 +123,10 @@ ife.to.inegi$name <- as.character(ife.to.inegi$name)
 
 ##Some municipalities are missing from the información geoestadística censal
 ##but are present in the shapefile
-##I used the map to visually match them with the inegi ones:
-##Cochoapa el Grande (ife - 12079 inegi 12078)
-##Marquelia (ife - 12080 inegi 12077)
-##Juchitán (ife - 12081 inegi 12080)
+##I used the interactive map to visually match them with the inegi ones:
+##Cochoapa el Grande (ife 12079 - inegi 12078)
+##Marquelia (ife 12080 - inegi 12077)
+##Juchitán (ife 12081 - inegi 12080)
 ##San Ignacio Cerro Gordo (created in 2006) (ife 14125 - inegi 14125)
 ife.to.inegi <- rbind(ife.to.inegi, data.frame(id.ife = c(12079, 12080, 12081, 14125),
            id.inegi = c(12078, 12077, 12080, 14125),
@@ -135,7 +142,7 @@ test_that("same number of municipalities",
 write.csv(ife.to.inegi[,1:2], "ife.to.inegi.csv", row.names = FALSE)
 
 
-message("Reading Secciones Shapefile (may take awhile...)")
+message("\n\n\nReading Secciones Shapefile (may take awhile...)\n\n\n")
 seccion <- readOGR(file.path("unzip", "seccion"), "mx_secciones_ife")
 ##seccion <- load(file.path("map-out", "rdata-secciones"), "secciones.RData")
 
@@ -176,6 +183,21 @@ writeOGR(seccion, "map-out/secciones-inegi", "secciones", driver="ESRI Shapefile
          overwrite_layer=TRUE)
 save(seccion, file = file.path("map-out","rdata-secciones", "secciones.RData"))
 ##load(file.path("map-out","rdata-secciones", "secciones.RData"))
+
+# replace0 <- function(str) {str_replace_all(str, " ", "0")}
+# createCode <- function(StateCode, MunCode){
+#   replace0(str_c(format(StateCode, width = 2),
+#                     format(MunCode, width = 3)))
+# }
+# 
+# 
+# seccion@data$id <- createCode(seccion@data$ENTIDAD, seccion@data$MUN_INEGI)
+# unique(seccion@data$id)
+# nrow(ife.to.inegi)
+# 
+# DT <- data.table(seccion@data)
+# DT$id <- createCode(DT$ENTIDAD, DT$MUN_INEGI)
+# DT[, list(P_15A17_F=sum(P_15A17_F)), by = list(id)]
 
 ##Dissolve the secciones into counties
 ##NOT DONE
