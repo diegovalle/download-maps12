@@ -4,7 +4,7 @@ CHMOD=chmod +x
 
 default: all
 
-all: dirs download download-censales unzip merge reproject recode
+all: dirs download download-censales otros unzip merge reproject recode
 
 dirs: 
 	for file in zip zip/distrito zip/mexico zip/seccion unzip unzip/distrito unzip/mexico unzip/seccion ife map-out map-out/distritos map-out/estados map-out/localidades map-out/municipios map-out/rdata-secciones map-out/secciones-inegi ; do \
@@ -18,6 +18,10 @@ download: dirs
 download-censales: dirs
 	$(CHMOD)  download-censales.sh
 	./download-censales.sh
+
+otros: dirs
+	$(CHMOD) otros.sh
+	./otros.sh
 
 unzip: dirs download download-censales
 	$(CHMOD)  unzip.sh

@@ -47,9 +47,9 @@ function download_inegi {
 
 ###Download Shapefiles from the IFE
 #http://gaia.inegi.org.mx/NLB/tunnel/IFE2010/Descarga.do?tabla=0&grupo=0&edo=
-download_ife distrito "http://gaia.inegi.org.mx/NLB/tunnel/IFE2010/Descarga.do?tabla=1&grupo=1,2,3,4,5,6,7,8,9,10,11,12&edo="
+download_ife distrito "http://gaia.inegi.org.mx/NLB/tunnel/IFE2010/Descarga.do?tabla=0&grupo=0&edo="
 
-download_ife seccion "http://gaia.inegi.org.mx/NLB/tunnel/IFE2010/Descarga.do?tabla=2&grupo=1,2,3,4,5,6,7,8,9,10,11,12&edo="
+download_ife seccion "http://gaia.inegi.org.mx/NLB/tunnel/IFE2010/Descarga.do?tabla=0&grupo=0&edo="
 
 ###Download Shapefiles from the INEGI
 download_inegi municipios50.zip "http://mapserver.inegi.org.mx/MGN/mgm2010v5_0.zip"
@@ -59,7 +59,6 @@ download_inegi estados50.zip "http://mapserver.inegi.org.mx/MGN/mge2010v5_0.zip"
 download_inegi localidades-urbanas50.zip "http://mapserver.inegi.org.mx/MGN/mglu2010v5_0.zip"
 
 download_inegi localidades-rurales50.zip "http://mapserver.inegi.org.mx/MGN/mglr2010v5_0.zip"
-
 
 
 

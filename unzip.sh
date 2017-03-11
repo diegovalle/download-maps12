@@ -8,6 +8,8 @@ function decompress {
 }
 
 decompress mexico
-decompress distrito
-decompress seccion
 
+decompress distrito
+rm -rf unzip/distrito/secciones*
+decompress seccion
+rm -rf unzip/seccion/distritos*
