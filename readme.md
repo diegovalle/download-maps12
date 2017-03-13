@@ -27,7 +27,7 @@ In the map-out directory you'll find
 * localidades: Shapefiles of the rural localities and the polygons of the urban ones
 * municipios: Shapefile of the counties of Mexico
 * rdata-secciones: serialized secciones (precincts) map as an R object
-
+* otros: All the new shapefiles the INEGI added in 2017 (localidades, colonias, escuela, etc)
 
 Since the IFE uses a different coding standard for the municipalities of Mexico than the INEGI, I've recoded the municipality codes so that they match the ones the INEGI uses. 
 
