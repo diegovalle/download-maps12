@@ -146,9 +146,9 @@ message("\n\n\nReading Secciones Shapefile (may take awhile...)\n\n\n")
 seccion <- readOGR(file.path("unzip", "seccion"), "mx_secciones_ife")
 ##seccion <- load(file.path("map-out", "rdata-secciones"), "secciones.RData")
 
-
-v <- as.numeric(str_c(seccion@data$ENTIDAD, 
-                      gsub(" ", "0", format(seccion@data$MUNICIPIO, width = 3))))
+v <- as.numeric(str_c(str_sub(seccion@data$CLAVEGEO, 1 , 2), str_sub(seccion@data$CLAVEGEO, 6, 8)))
+#v <- as.numeric(str_c(seccion@data$ENTIDAD, 
+#                      gsub(" ", "0", format(seccion@data$MUNICIPIO, width = 3))))
 ##a <- data.frame(sort(unique(v)), sort(ife.to.inegi$id.ife))
 test_that("the ife codes are equal to the ones in the map",
           {expect_that(all.equal(sort(unique(v)), sort(ife.to.inegi$id.ife)), equals(TRUE))})
@@ -159,7 +159,7 @@ v <-recodeVar(v,
               ife.to.inegi$id.inegi, 
               default = NA)
 
-seccion@data$MUN_IFE <- seccion@data$MUNICIPIO
+seccion@data$MUN_IFE <- str_sub(seccion@data$CLAVEGEO, 6, 8)
 seccion@data$MUNICIPIO <- NULL
 seccion@data$MUN_INEGI <- as.numeric(str_sub(v, 3))
 ##plot(secc)
