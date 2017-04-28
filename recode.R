@@ -161,7 +161,7 @@ v <-recodeVar(v,
 
 seccion@data$MUN_IFE <- str_sub(seccion@data$CLAVEGEO, 6, 8)
 seccion@data$MUNICIPIO <- NULL
-seccion@data$MUN_INEGI <- as.numeric(str_sub(v, 3))
+seccion@data$MUN_INEGI <- str_sub(v, 3)
 ##plot(secc)
 
 
