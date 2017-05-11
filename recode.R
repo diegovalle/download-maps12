@@ -10,7 +10,7 @@
 ##library(rgeos)
 ##install necessary packages if they are not already installed
 ##http://stackoverflow.com/questions/4090169/elegant-way-to-check-for-missing-packages-and-install-them
-list.of.packages <- c("rgdal", "maptools", "stringr", "doBy", "testthat", "data.table")
+list.of.packages <- c("rgdal", "maptools", "stringr", "doBy", "testthat", "data.table", "rgeos")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)
 
