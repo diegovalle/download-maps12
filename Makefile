@@ -12,27 +12,21 @@ dirs:
 	done
 
 download: dirs
-	$(CHMOD) download.sh
 	./download.sh
 
 download-censales: dirs
-	$(CHMOD)  download-censales.sh
 	./download-censales.sh
 
 otros: dirs
-	$(CHMOD) otros.sh
 	./otros.sh
 
 unzip: dirs download download-censales
-	$(CHMOD)  unzip.sh
 	./unzip.sh
 
 merge: dirs download download-censales unzip
-	$(CHMOD)  merge.sh
 	./merge.sh
 
 reproject: dirs download download-censales unzip merge
-	$(CHMOD)  reproject.sh
 	./reproject.sh
 
 recode: download download-censales unzip merge
