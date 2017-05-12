@@ -19,7 +19,7 @@ You can also use a docker image to run the program
 docker pull diegovalle/download-maps12
 # shared directory to store the output
 mkdir -p /tmp/download-ine2010 
-docker run -v /tmp/download-ine2010:donwload-maps12/map-out -i -t diegovalle/download-maps12
+docker run -v /tmp/download-ine2010:/download-maps12/map-out -i -t diegovalle/download-maps12
 ```
 
 and run make within the container
