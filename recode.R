@@ -161,20 +161,21 @@ v <-recodeVar(v,
 
 seccion@data$MUN_IFE <- str_sub(seccion@data$CLAVEGEO, 6, 8)
 seccion@data$MUNICIPIO <- NULL
-seccion@data$MUN_INEGI <- str_sub(v, 3)
+seccion@data$MUN_INEGI <- str_pad(v %% 1000, 3, side = "left", pad = "0")
 ##plot(secc)
 
-
 ##test that the recoding went correctly
-idx <- sample(1:length(seccion@data$MUN_INEGI), 1000)
-for(i in idx)
-  test_that("municipality codes match the ife to inegi trancoding",
-            {expect_that(seccion@data$MUN_INEGI[i] ==
-              as.numeric(str_sub(ife.to.inegi[which(ife.to.inegi$id.ife == 
-                                            as.numeric(str_c(seccion@data$ENTIDAD[i], 
-                                                             gsub(" ", "0", format(seccion@data$MUN_IFE[i], 
-                                                                                   width = 3))))),]$id.inegi, 3)),
-                        equals(TRUE))})
+for(i in 1:nrow(seccion)) {
+  print(i)
+  expect_that(seccion@data$MUN_INEGI[i] ==
+                str_pad(ife.to.inegi[which(ife.to.inegi$id.ife == 
+                                             as.numeric(str_c(seccion@data$ENTIDAD[i], 
+                                                              seccion@data$MUN_IFE[i]))
+                ),]$id.inegi %% 1000, 3, side = "left", pad = "0"),
+              equals(TRUE))
+}
+
+
 
 test_that("no nulls in the INEGI municipalities", 
           {expect_that(all(is.na(seccion@data$MUN_INEGI)), equals(FALSE))})
@@ -182,47 +183,4 @@ test_that("no nulls in the INEGI municipalities",
 writeOGR(seccion, "map-out/secciones-inegi", "secciones", driver="ESRI Shapefile",
          overwrite_layer=TRUE)
 save(seccion, file = file.path("map-out","rdata-secciones", "secciones.RData"))
-##load(file.path("map-out","rdata-secciones", "secciones.RData"))
 
-# replace0 <- function(str) {str_replace_all(str, " ", "0")}
-# createCode <- function(StateCode, MunCode){
-#   replace0(str_c(format(StateCode, width = 2),
-#                     format(MunCode, width = 3)))
-# }
-# 
-# 
-# seccion@data$id <- createCode(seccion@data$ENTIDAD, seccion@data$MUN_INEGI)
-# unique(seccion@data$id)
-# nrow(ife.to.inegi)
-# 
-# DT <- data.table(seccion@data)
-# DT$id <- createCode(DT$ENTIDAD, DT$MUN_INEGI)
-# DT[, list(P_15A17_F=sum(P_15A17_F)), by = list(id)]
-
-##Dissolve the secciones into counties
-##NOT DONE
-## message("creating shapefile of the ife municipios... may take awhile")
-## ife.muns <- NULL
-## for(i in seq_along(1:32)) {
-  
-##   DissolveResult <- unionSpatialPolygons(seccion[seccion@data$ENTIDAD == i,],
-##                                          seccion@data$MUN_IFE[seccion@data$ENTIDAD == i],
-##                                          threshold = 50000000000000)
-##   DissolveResult <- spChFIDs(DissolveResult,
-##                              paste(i, sapply(slot(DissolveResult, "polygons"), slot, "ID"),
-##                                    sep="_"))
-
-##   if(!is.null(ife.muns))
-##     ife.muns <- spRbind(ife.muns, DissolveResult)
-##   else
-##     ife.muns <- DissolveResult
-##   message(str_c("dissolved state ", i, " of 32"))
-## }
-## plot(ife.muns)
-
-## data <- data.frame(NewID = row.names(ife.muns))
-## row.names(data) <- row.names(ife.muns)
-
-## writeOGR(SpatialPolygonsDataFrame(ife.muns, data),
-## "map-out/municipios-ife", "municipios-ife", driver="ESRI Shapefile",
-##          overwrite_layer=TRUE)
