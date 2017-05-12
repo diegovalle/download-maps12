@@ -13,7 +13,16 @@ If something went wrong with the downloading, use:
 $ make clean
  ```
 
-and try again after a few hours
+You can also use a docker image to run the program
+
+```
+docker pull diegovalle/download-maps12
+# shared directory to store the output
+mkdir -p /tmp/download-ine2010 
+docker run -v /tmp/download-ine2010:donwload-maps12/map-out -i -t diegovalle/download-maps12
+```
+
+and run make within the container
 
 Since the scripts download a whole bunch of maps it may take a while to finish
 
