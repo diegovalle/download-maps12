@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 # Download electoral shapefiles from the INE
 # includes colonias
 # needs sudo apt-get install p7zip-rar p7zip-all
@@ -9,8 +9,6 @@ declare -a states=("ags" "bc" "bcs" "camp" "coah" "col" "chis" "chih"
                    "df" "dgo" "gto" "gro" "hgo" "jal" "mex" "mich" "mor" "nay" "nl" "oax"
                    "pue" "qro" "qroo" "slp" "sin" "son" "tab" "tamps" "tlax" "ver" "yuc"
                    "zac");
-#!/bin/bash
-set -euo pipefail
 
 mkdir -p map-out/otros
 counter=0
@@ -25,6 +23,7 @@ do
     fi
     curl -o "ECEG_$FILENUM.zip" "http://gaia.inegi.org.mx/geoelectoral/doctos/ECEG_$FILENUM.zip"
     unzip "ECEG_$FILENUM.zip"
+    rm "ECEG_$FILENUM.zip"
     7z x "$FILENUM/fscommand/pry.exe" -o${states[$counter]}_tmp
     #mkdir ${states[$counter]}
     mv ${states[$counter]}_tmp/ECEG2010/cartografiaDigital_IFE map-out/otros/${states[$counter]}
@@ -32,8 +31,8 @@ do
     rm -rf ${states[$counter]}_tmp # delete the dir from 7z
     rm -rf "$FILENUM" # delete the dir from unzip
     # rename files
-    find map-out/otros/ -type f -name "CCL_E$FILENUM_*" -exec rename "s/CCL_E$FILENUM/${states[$counter]}/" "{}"  \;
-    find map-out/otros/ -type f -name "_E$FILENUM_*" -exec rename "s/_E$FILENUM\./${states[$counter]}\./" "{}"  \;
+    find map-out/otros/"${states[$counter]}" -type f -name "CCL_E$FILENUM*" -exec rename "s/CCL_E$FILENUM/${states[$counter]}/" "{}"  \;
+    find map-out/otros/"${states[$counter]}" -type f -name "_E$FILENUM*" -exec rename "s/_E$FILENUM\./${states[$counter]}\./" "{}"  \;
     sleep 1
     counter=$((counter + 1))
 done
