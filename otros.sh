@@ -9,6 +9,8 @@ declare -a states=("ags" "bc" "bcs" "camp" "coah" "col" "chis" "chih"
                    "df" "dgo" "gto" "gro" "hgo" "jal" "mex" "mich" "mor" "nay" "nl" "oax"
                    "pue" "qro" "qroo" "slp" "sin" "son" "tab" "tamps" "tlax" "ver" "yuc"
                    "zac");
+#!/bin/bash
+set -euo pipefail
 
 mkdir -p map-out/otros
 counter=0
@@ -21,7 +23,7 @@ do
     else
         FILENUM="$i"
     fi
-    curl -o "ECEG_$FILENUM.zip" "http://gaia.inegi.org.mx/geoelectoral/datos/ECEG_$FILENUM.zip"
+    curl -o "ECEG_$FILENUM.zip" "http://gaia.inegi.org.mx/geoelectoral/doctos/ECEG_$FILENUM.zip"
     unzip "ECEG_$FILENUM.zip"
     7z x "$FILENUM/fscommand/pry.exe" -o${states[$counter]}_tmp
     #mkdir ${states[$counter]}

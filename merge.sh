@@ -1,6 +1,7 @@
 #!/bin/bash
 #Since you have to download the electoral maps by state this
 #file merges them into a single file
+set -euo pipefail
 
 function merge {
   #Delete the merged shapefile if it exists

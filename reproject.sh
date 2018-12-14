@@ -1,6 +1,8 @@
 #!/bin/bash 
 #Reproject the shapefiles so that you can use the maps from
 #google earth or ggplot
+set -euo pipefail
+
 PROJECTION="+proj=longlat +ellps=WGS84 +no_defs +towgs84=0,0,0"
 
 function reproject {

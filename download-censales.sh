@@ -2,8 +2,9 @@
 #Download the estadisticas censales from the ife
 #These files are necessary to merge with the file containing the inegi codes using
 #the names of the municipalities
+set -euo pipefail
 
-WGET="wget -c -nc -w 5 --random-wait --tries=10 "
+WGET="wget -c -nc -w 5 --random-wait --tries=12 --waitretry=1"
 
 declare -a files=("01Aguascalientes" "02BajaCalifornia" "03BajaCaliforniaSur" 
 "04Campeche" "05Coahuila" "06Colima" "07Chiapas" 

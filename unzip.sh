@@ -1,5 +1,7 @@
 #!/bin/bash 
 #Unzip the shapefiles
+set -euo pipefail
+
 function decompress {
   for i in zip/$1/*.zip
     do      

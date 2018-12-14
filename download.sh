@@ -1,25 +1,31 @@
-#!/bin/bash 
+#!/bin/bash
 #Download shape files and electoral data from the INEGI
 #The files are available by state
-WGET="wget -c -nc -w 5 --random-wait --tries=10 "
+set -euo pipefail
+WGET="wget -c -nc -w 5 --random-wait --ignore-length --tries=12 --waitretry=1"
 
 ##Download the electoral shapefiles
 function download_ife {
   for (( i = 1 ; i <= 32 ; i++ ))
-    do 
-      echo $i
-      if [ ! -f zip/$1/$i-$1.zip ];
-        then
-          $WGET $2$i -O zip/$1/$i-$1.zip
-      fi
-      if [ ! -s zip/$1/$i-$1.zip ]
-      then
-        echo "##########################################################################"
-	echo "Something went wrong when downloading the file. make clean"
-        echo "##########################################################################"
-	exit 1
-      fi
-    done 
+  do
+      while :
+            do
+            echo $i
+            if [ ! -f zip/$1/$i-$1.zip ];
+            then
+                $WGET $2$i -O zip/$1/$i-$1.zip
+            fi
+            if [ ! -s zip/$1/$i-$1.zip ]; then
+                echo "##########################################################################"
+                echo "Something went wrong when downloading the file. Trying again"
+                echo "##########################################################################"
+                rm zip/$1/$i-$1.zip
+                sleep 5
+            else
+                break
+            fi
+            done
+    done
 }
 
 #Download the state, municipality and locality shapefiles
@@ -30,16 +36,16 @@ function download_inegi {
       if [ $? -ne 0 ]
         then
           echo "##########################################################################"
-	  echo "Sometimes mapserver.inegi.org.mx goes down, make clean and try again after a few hours"
+          echo "Sometimes mapserver.inegi.org.mx goes down, make clean and try again after a few hours"
           echo "##########################################################################"
-	  exit 1
+          exit 1
       fi
     if [ ! -s zip/mexico/$1 ]
       then
         echo "##########################################################################"
-	echo "Something went wrong when downloading the file. make clean"
+        echo "Something went wrong when downloading the file. make clean"
         echo "##########################################################################"
-	exit 1
+        exit 1
     fi
   fi
 }
@@ -59,6 +65,3 @@ download_inegi estados50.zip "http://mapserver.inegi.org.mx/MGN/mge2010v5_0.zip"
 download_inegi localidades-urbanas50.zip "http://mapserver.inegi.org.mx/MGN/mglu2010v5_0.zip"
 
 download_inegi localidades-rurales50.zip "http://mapserver.inegi.org.mx/MGN/mglr2010v5_0.zip"
-
-
-
