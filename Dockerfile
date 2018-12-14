@@ -3,7 +3,7 @@ FROM rocker/r-base
 WORKDIR /download-maps12
 
 RUN echo "deb http://httpredir.debian.org/debian testing main contrib non-free" > /etc/apt/sources.list
-RUN apt-get -y update && apt-get install software-properties-common -y
+RUN apt-get -y update && apt-get install gnupg software-properties-common -y
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys FC6FA5EB4357B38A
 RUN add-apt-repository ppa:arx/release && apt-get update &&\
     apt-get install innoextract -y
